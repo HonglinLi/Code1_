@@ -1,0 +1,32 @@
+int w; 
+int h; 
+float myFloat; 
+String myString; 
+
+
+void setup(){
+  w = 200; 
+  h = 200;
+  
+  
+  myString = "ˋωˊ"; 
+ 
+  size(500, 500);
+  
+  background(100, 100, 100); 
+  noStroke(); 
+  textSize(24); 
+}
+
+void draw(){
+  rectMode(CENTER); 
+  fill(random(100,255), random(100,255), random(100,255)); 
+  ellipse(width*.5, height*.5, 90, 90);
+  ellipse(width*.25, height*.25, 90, 90);
+  ellipse(width*.75, height*.75, 90, 90);
+  
+  fill(200, 100, 200);
+  
+  text(myString, width/2.2, height/1.9); 
+
+}
