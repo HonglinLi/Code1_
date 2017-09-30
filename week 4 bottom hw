@@ -61,3 +61,50 @@ void draw() {
   y += dy * easing;
   shape(alien, mouseX,mouseY);
 }
+
+
+PImage img; 
+PImage img1;
+color basecolor;
+color currentColor;
+boolean imgClicked = false;
+boolean img1Clicked = false;
+
+
+void setup() {
+  size(500,500);
+  img = loadImage("yellowmoon.png");
+  img1 = loadImage("blackmoon.png");
+  
+}
+
+ 
+void draw() {
+   update(mouseX, mouseY);
+   
+   //if clicked 
+     //then change the background
+}
+
+  void update(int x, int y) {
+  if (img(x,y,size,size)) {
+   imgClicked = true;
+   img1Clicked = false;
+  } else {
+    imgClicked = img1Clicked = false;
+    background(0);
+  }
+ 
+ if () {
+    img1Clicked = true;
+    imgClicked = false;
+  } else {
+    img1Clicked = imgClicked = false;
+    background(255);
+  }
+}
+
+//mouse pressed to detect if you're clicking 
+//distance calcuation 
+//if clicking within the distance 
+  //then set boolean clicking to true; 
