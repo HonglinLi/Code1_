@@ -1,0 +1,63 @@
+int y = 50;
+int width = 50;
+int height = 50;
+float x;
+float Y;
+float easing = 0.05;
+PShape alien, egg, eggWhite;
+ArrayList<PVector> poop = new ArrayList();
+
+
+
+void setup() { 
+  size(800,800,P3D);
+  
+ 
+  for (int i=0;i<1000;i++) {
+    PVector P = new PVector(random(width*30), random(height*30));
+    poop.add(P);
+  }
+  //size(fullcreen,P3D);
+  ellipseMode(CENTER);
+  alien = createShape(GROUP);
+  
+  eggWhite = createShape(ELLIPSE,x+10,y+10,width*2,height*2);
+  eggWhite.setFill(color(255));
+  eggWhite.setStroke(color(255));
+  
+  egg = createShape(ELLIPSE,x+20,y+20,width/1.5,height/1.5);
+  egg.setFill(color(255, 230, 137));
+  egg.setStroke(color(255,230,137));
+  egg.translate(0, 0, 30);
+  
+  alien.addChild(egg);
+  alien.addChild(eggWhite);
+  
+  
+  
+
+}
+
+void draw() {
+ background(203, 221, 228);
+ 
+ 
+   for (int i=0;i<poop.size();i++) {
+    PVector P = poop.get(i);
+    PVector M = new PVector(pmouseX-mouseX, pmouseY-mouseY);
+    P.add(M);
+    float d = dist(P.x, P.y, width*10, height*10);
+    d = map(d, 10, width*10, 10, 10);
+    ellipse(P.x, P.y, d, d);
+    fill(-10);
+    noStroke();
+  }
+  float targetX = mouseX;
+  float dx = targetX - x;
+  x += dx * easing;
+  
+  float targetY = mouseY;
+  float dy = targetY - y;
+  y += dy * easing;
+  shape(alien, mouseX,mouseY);
+}
