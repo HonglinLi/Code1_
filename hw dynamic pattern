@@ -1,1 +1,57 @@
+// examples & notes
+int x;
+int y;
+float maxDistance;
 
+void setup(){
+  size(1000,1000);
+  background(0);
+  maxDistance = dist(0, 0, 1000,1000);
+}
+
+
+
+
+void draw() {
+  //for (int i = 0; i <=1000; i+=10)
+  //  for (int j = 0; j <= 1000; j +=10)
+  //    ellipse(i,j,10,10);
+       noStroke();
+ for(int x = 0; x <= 1000; x += 10); 
+    for(int y = 0; y <= 1000; y += 10);
+      float size = dist(mouseX, mouseY, x, y);
+      size = size/maxDistance * 100;
+      ellipse(x,y,size,size);
+      
+  //float d = dist(width/2, height/2, mouseX, mouseY);
+  //float maxDist = dist(0, 0, width/2, height/2);
+  //float gray = map(d, 0, maxDist, 0, 255);
+  //fill(gray);
+  //rect(0, 0, width, height);
+}
+
+float maxDistance;
+
+void setup() {
+  size(1000, 1000);
+  background(255);
+  translate(500, 500);
+   maxDistance = dist(0, 0, 1000,1000);
+  for (float i=0; i<550; i += 0.5) { 
+    pushMatrix();
+    rotate(radians(i));
+    translate(0, 300);
+    rotate(radians(i*5));
+    scale(map(cos(radians(i*20)), -1, 1, .5, 1), 
+    map(cos(radians(i*9)), -6, 1, .5, 1));
+    drawEllipse();
+    popMatrix();
+  }
+}
+void drawEllipse() {
+  noFill();
+  stroke(100, 128);
+  ellipse(0, 0, 120, 80);
+ 
+    
+    }
