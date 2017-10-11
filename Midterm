@@ -1,8 +1,17 @@
 Interactive Moon 
 Use Processing to create mouse clicked interactive lunar eclipse.
 as the moon phrases change, music starts to play and werewolf starts to jump out
+1.create luminous effect
+2.soft moon/click drag
+3.add music
+4.add picture
+5.mouseclicked
+6.mapping clicking area
+7.loop
+8.add words
 
-example:
+basic code for moon:
+
 void setup(){
 size(715, 300);
 background(0);
@@ -35,3 +44,229 @@ arc(0, 0, 75, 75, 0, PI*4);
 }
 
  
+basic code for word:
+// Adapted from https://codepen.io/nickpiesco/pen/YPbqPM?editors=1010
+
+PFont font;
+Clock clock = new Clock();
+void setup() {
+  fullScreen();
+  font = createFont("Consolas", 50);
+  textFont(font);
+  textSize(30);
+  textAlign(CENTER, CENTER);
+}
+
+void draw() {
+  background(0);
+  translate(width/2-220, height/2-200);
+  clock.display();
+  clock.update();
+}
+
+class Text {
+  char c;
+  int type; 
+  /*0 is always off, 
+   1 is always on, 
+   2 is a, 
+   3 is quarter,
+   4 is twenty, 
+   5 is five (min), 
+   6 is half, 
+   7 is ten (min),
+   8 is to, 
+   9 is past, 
+   10 is nine, 
+   11 is one, 
+   12 is six, 
+   13 is three, 
+   14 is four, 
+   15 is five (hour)
+   16 is two, 
+   17 is eight, 
+   18 is eleven, 
+   19 is seven, 
+   20 is twelve, 
+   21 is ten (hour), 
+   22 is oclock
+   */
+  PVector pos;
+
+  Text(char _c, int _type, float x, float y) {
+    c = _c;
+    type = _type;
+    pos = new PVector(x, y);
+    if (type == 0) {
+      c = char(int(random(65, 90)));
+    }
+  }
+
+  void display(boolean on) {
+    if (on) fill(255);
+    else fill(100);
+    text(c, pos.x, pos.y);
+  }
+}
+
+class Textrow {
+  Text[] textrow;
+
+  Textrow(char[] c, int[] types, float y) {
+    textrow = new Text[11];
+    if (c.length == types.length) {
+      for (int i = 0; i < 11; i++) {
+        textrow[i] = new Text(c[i], types[i], i*40, y);
+      }
+    } else {
+    }
+  }
+
+//  void display(boolean[] on) {
+//    for (int i = 0; i < textrow.length; i++) {
+//      textrow[i].display(on[i]);
+//    }
+//  }
+}
+
+class Clock {
+  float h = hour();
+  int m = minute();
+  Textrow[] clock;
+  boolean[] on = new boolean[23];
+
+  Clock() {
+    clock = new Textrow[11];
+    char[] row1 = {'I', 'T', 'Z', 'I', 'S', 'Z', 'Z', 'Z', 'Z', 'Z', 'Z'};
+    int[] state1 = {1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0};
+    clock[0] = new Textrow(row1, state1, 0);
+
+    char[] row2 = {'A', 'Z', 'Q', 'U', 'A', 'R', 'T', 'E', 'R', 'Z', 'Z'};
+    int[] state2 = {2, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0};
+    clock[1] = new Textrow(row2, state2, 40);
+
+    char[] row3 = {'T', 'W', 'E', 'N', 'T', 'Y', 'F', 'I', 'V', 'E', 'Z'};
+    int[] state3 = {4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 0};
+    clock[2] = new Textrow(row3, state3, 80);
+
+    char[] row4 = {'H', 'A', 'L', 'F', 'Z', 'T', 'E', 'N', 'Z', 'T', 'O'};
+    int[] state4 = {6, 6, 6, 6, 0, 7, 7, 7, 0, 8, 8};
+    clock[3] = new Textrow(row4, state4, 120);
+
+    char[] row5 = {'P', 'A', 'S', 'T', 'Z', 'Z', 'Z', 'N', 'I', 'N', 'E'};
+    int[] state5 = {9, 9, 9, 9, 0, 0, 0, 10, 10, 10, 10};
+    clock[4] = new Textrow(row5, state5, 160);
+
+    char[] row6 = {'O', 'N', 'E', 'S', 'I', 'X', 'T', 'H', 'R', 'E', 'E'};
+    int[] state6 = {11, 11, 11, 12, 12, 12, 13, 13, 13, 13, 13};
+    clock[5] = new Textrow(row6, state6, 200);
+
+    char[] row7 = {'F', 'O', 'U', 'R', 'F', 'I', 'V', 'E', 'T', 'W', 'O'};
+    int[] state7 = {14, 14, 14, 14, 15, 15, 15, 15, 16, 16, 16};
+    clock[6] = new Textrow(row7, state7, 240);
+
+    char[] row8 = {'E', 'I', 'G', 'H', 'T', 'E', 'L', 'E', 'V', 'E', 'N'};
+    int[] state8 = {17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18};
+    clock[7] = new Textrow(row8, state8, 280);
+
+    char[] row9 = {'S', 'E', 'V', 'E', 'N', 'T', 'W', 'E', 'L', 'V', 'E'};
+    int[] state9 = {19, 19, 19, 19, 19, 20, 20, 20, 20, 20, 20};
+    clock[8] = new Textrow(row9, state9, 320);
+
+    char[] row10 = {'T', 'E', 'N', 'Z', 'Z', 'O', 'C', 'L', 'O', 'C', 'K'};
+    int[] state10 = {21, 21, 21, 0, 0, 22, 22, 22, 22, 22, 22};
+    clock[9] = new Textrow(row10, state10, 360);
+
+    char[] row11 = {'Z', 'Z', 'Z', 'Z', 'Z', 'Z', 'Z', 'Z', 'Z', 'Z', 'Z'};
+    int[] state11 = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    clock[10] = new Textrow(row11, state11, 400);
+
+    for (int i = 0; i < on.length; i++) {
+      on[i] = false;
+    }
+  }
+
+  boolean compare(int i, int a, int b) {
+    return(i >= a && i <= b);
+  }
+
+  void update() {
+    m = minute();
+    //h = round(hour() + norm(minute(), 0, 60));
+    h = hour();
+    h = h % 12;
+    for(int i = 0; i < on.length; i++){
+      on[i] = false;
+    }
+    on[1] = true;
+
+    if (compare(m, 0, 4)) {
+      on[22] = true;
+    } else if (compare(m, 5, 9) || compare(m, 25, 29) ||
+      compare(m, 35, 39) || compare(m, 55, 59)) {
+      on[5] = true;
+    } else if (compare(m, 10, 14) || compare(m, 50, 54)) {
+      on[7] = true;
+    } else if (compare(m, 15, 19) || compare(m, 45, 49)) {
+      on[2] = true;
+      on[3] = true;
+    } else if (compare(m, 30, 34)) {
+      on[6] = true;
+    }
+    
+    if (compare(m, 20, 29) || compare(m, 35, 44)) {
+      on[4] = true;
+    }
+    
+    if (compare(m, 35, 59)) {
+      on[8] = true;
+    } else if (compare(m, 5, 34)) {
+      on[9] = true;
+    }
+    
+    if ((h == 0 && compare(m, 35, 59)) || (h == 1 && compare(m, 0, 34))) {
+      on[11] = true;
+    } else if ((h == 1 && compare(m, 35, 59)) || (h == 2 && compare(m, 0, 34))) {
+      on[16] = true;
+    } else if ((h == 2 && compare(m, 35, 59)) || (h == 3 && compare(m, 0, 34))) {
+      on[13] = true;
+    } else if ((h == 3 && compare(m, 35, 59)) || (h == 4 && compare(m, 0, 34))) {
+      on[14] = true;
+    } else if ((h == 4 && compare(m, 35, 59)) || (h == 5 && compare(m, 0, 34))) {
+      on[15] = true;
+    } else if ((h == 5 && compare(m, 35, 59)) || (h == 6 && compare(m, 0, 34))) {
+      on[12] = true;
+    } else if ((h == 6 && compare(m, 35, 59)) || (h == 7 && compare(m, 0, 34))) {
+      on[19] = true;
+    } else if ((h == 7 && compare(m, 35, 59)) || (h == 8 && compare(m, 0, 34))) {
+      on[17] = true;
+    } else if ((h == 8 && compare(m, 35, 59)) || (h == 9 && compare(m, 0, 34))) {
+      on[10] = true;
+    } else if ((h == 9 && compare(m, 35, 59)) || (h == 10 && compare(m, 0, 34))) {
+      on[21] = true;
+    } else if ((h == 10 && compare(m, 35, 59)) || (h == 11 && compare(m, 0, 34))) {
+      on[18] = true;
+    } else if ((h == 11 && compare(m, 35, 59)) || (h == 0 && compare(m, 0, 34))) {
+      on[20] = true;
+    }
+    
+    
+  }
+
+  void display(){
+    for(int i = 0; i < clock.length; i++){
+      Textrow row = clock[i];
+      for(int j = 0; j < row.textrow.length; j++){
+        Text t = row.textrow[j];
+        for(int k = 0; k < on.length; k++){
+          if(t.type == k){
+            t.display(on[k]);
+          }
+        }
+      }
+    }
+  }
+  //char 'Z'{
+  //  return Character.toUpperCase(char(int(random(33, 127))));
+  //}
+}
