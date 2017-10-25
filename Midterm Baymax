@@ -1,0 +1,181 @@
+BayMax BayMax;
+Body  body;
+Arm  leftArm, rightArm;
+Head Head;
+Leg rightLeg;
+Leg leftLeg;
+float a;
+float w = 120;
+float l = w/4;
+
+
+void setup(){
+  size(600,600);
+}
+
+
+
+void draw(){
+  colorMode(HSB,360,100,100);
+  background(0,80,100);
+ // float w = 120;
+ // float l = w/4;
+  BayMax = new BayMax (w,l);
+  BayMax.leftArm.a=atan2(mouseY,mouseX);//angle of lefr arm
+  BayMax.rightArm.a=PI-atan2(mouseY,width-mouseX);//angle of right arm
+  //leg turning 
+  //mouse between -5 to 5
+  if((mouseX-pmouseX)>5){;
+  BayMax.leftLeg.a=PI/4;
+  BayMax.rightLeg.a=PI/4;
+} else{
+  BayMax.leftLeg.a=0;
+  BayMax.rightLeg.a=0;
+}
+  //BayMax
+  pushMatrix();
+  translate(mouseX,mouseY);
+  BayMax.display();
+  popMatrix();
+}
+
+
+//draw BayMax
+class BayMax{
+  //float w,l;
+  Head head;
+   Body body;
+  Arm leftArm;
+  Arm rightArm;
+  Leg rightLeg;
+  Leg leftLeg;
+   float w,l;
+   
+   BayMax(float w, float l){
+      this.w=w;
+       this.l=l;
+  head = new Head(w/3.5);
+  body = new Body(1/3);
+  leftArm = new Arm(1/5.0);
+  rightArm = new Arm(1/5,0);
+  leftLeg = new Leg(1/6,0);
+  rightLeg = new Leg(1/6,0);
+}
+}
+
+void display(){
+  ellipseMode(RADIUS);
+  //left arm
+  pushMatrix();
+  translate(-body.w,-body.1/2);
+  rotate(leftArm.a);
+  popMatrix();
+  //right arm
+  pushMatrix();
+  translate(body.w,-body.1/2);
+  rotate(rightArm.a);
+  popMatrix();
+  //left leg
+  pushMatrix();
+  translate(-body.w/3,body.l/1,25);
+  rotate(leftLeg.a);
+  leftLeg.display();
+  popMatrix();
+  //right leg
+  pushMatrix();
+  translate(body.w/3,body.l/1.25);
+  rotate(rightLeg.a);
+  rightLeg.display();
+  popMatrix();
+  //body
+  body.display();
+  //head
+  pushMatrix();
+  translate(0,-body.l);
+  head.display();
+  popMatrix();
+}
+
+
+class Head{
+  float w,l;
+  Head(float w){
+    this.w=w;
+    l=w*2/3;
+  }
+  void display(){
+    ellipseMode(RADIUS);
+    fill(0,0,100);
+    stroke(0,0,0);
+    strokeWeight(2);
+    //face
+    ellipse(0,0,w,l);
+    stroke(0,0,0);
+    fill(0,0,0);
+    //left eye
+    ellipse(-w/5*2,-1/10,1/10,1/10);
+    //right eye
+    ellipse(w/5*2,-1/10,1/10,1/10);
+    noFill();
+    stroke(0,0,0);
+    strokeWeight(2);
+    line(-w/5*3,1/5,1/10,1/15)
+    //blush
+    ellipse(-w/5*3,1/5,1/10,1/15);
+    ellipse(w/5*3,1/5,1/10,1/15);
+  }
+}
+class Body{
+  float w,l;
+  body(float l){
+    this.l=l;
+    w=l*1/1.2;
+  }
+  void display(){
+    ellipseMode(RADIUS);
+    fill(0,0,100);
+    stroke(0,0,0);
+    strokeWeight(2);
+    ellipse(0,0,w,l);
+    fill(30,10,100);
+    stroke(0,10,60);
+    strokeWeight(1);
+    ellipse(w/5*2,-1/5*2,w/8,w/8);
+    beginShape();
+    vertex(w/5*2-w/8,-l/5*2);
+    vertex(w/5*2-w?16,-l/5*2);
+    vertex(w/5*2-w/16,-l/5*2-w/16);
+    vertex(w/5*2+w/16,-l/5*2-w/16);
+    vertex(w/5*2+w/16,-l/5*2);
+    vertex(w/5*2+w/8,-l/5*2);
+    endShape();
+  }
+}
+class Arm{
+  float w,l;
+  float a;
+  arm(float l, float a){
+    this.l=l;
+    w=l*1/2;
+    this.a=a;
+  }
+  void display(){
+    ellipseMode(RADIUS);
+    fill(0,0,100);
+    stroke(0,0,0);
+    strokeWeight(2);
+    ellipse(0,0,w,l);
+  }
+}
+    class Leg{
+  float w,l;
+  float a;
+  Leg(float l,float a){
+    this.l=l;w=l*1/2;this.a=a;
+  }
+  void display(){
+    ellipseMode(RADIUS);
+    fill(0,0,100);stroke(0,0,0);strokeWeight(2);
+    ellipse(0,0,w,l);
+  } 
+}
