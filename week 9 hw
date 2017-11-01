@@ -1,63 +1,105 @@
-int nbSamples = 1200;
-float [] [] ptsCircle = new float [nbSamples] [2];
-float radius = 200.0, deltaX;
-int idVertexStart, idVertexEnd, deltaIndex, idVertexStartInsideCrescent, idVertexEndInsideCrescent;
- 
+Ball [] ballCollection = new Ball [20];
+int numFrames = 33; 
+int currentFrame = 1;
+int frameNumber = 1; 
+PImage [] sun = new PImage [numFrames];
+
 void setup() {
-  size(600, 600);
-  background(0);
-  noStroke();
- 
-  for (int i=0; i<nbSamples; i++) {
-    ptsCircle[i][0] = radius * (cos(TWO_PI*(i/float(nbSamples))));
-    ptsCircle[i][1] = radius * (sin(TWO_PI*(i/float(nbSamples))));
+  size(800, 800);
+  smooth();
+  frameRate(24);
+
+  img = loadImage("potato.png");
+  img1 = loadImage("potato1.jpg");
+  
+  for (int i = 0; i< numFrames; i++) {
+    sun[i] = loadImage("sun-" + i + ".jpg");
+     
+  }
+
+  
+  //INITIALIZE
+  for (int i = 1; i < ballCollection.length; i++) {
+    ballCollection[i] = new Ball(random(0, width), random(0, height));
   }
 }
- 
+
+
+
 void draw() {
-  background(0);
-  translate(width*0.5, height*0.5);
-  rotate(HALF_PI+QUARTER_PI);
- 
-  idVertexStart = -floor(map(mouseX,0,width*2,floor(nbSamples*0.5),0));
-  idVertexEnd = floor(map(mouseX,0,width*2,floor(nbSamples*0.5),0));
-  deltaIndex = idVertexEnd-idVertexStart;
-  idVertexStartInsideCrescent = -floor((nbSamples-deltaIndex)*0.5);
-  idVertexEndInsideCrescent = floor((nbSamples-deltaIndex)*0.5);
- 
- 
-  fill(255);
-  beginShape();
- 
-  // Outside crescent
-  for (int i=idVertexStart; i<idVertexEnd; i++) {
-   if (i < 0) {
-     vertex(ptsCircle[nbSamples+i][0], ptsCircle[nbSamples+i][1]);
-   } else {
-     vertex(ptsCircle[i][0], ptsCircle[i][1]);
-   }
+  background(255);
+  currentFrame = (currentFrame+1) % numFrames;
+  imageMode(CENTER);
+
+
+  //FUNCTION
+  for (int i = 1; i < ballCollection.length; i++) { 
+    ballCollection[i].run();
   }
-  if (deltaIndex < nbSamples) {
-   vertex(ptsCircle[idVertexEnd][0], ptsCircle[idVertexEnd][1]);
+  
+  if(frameNumber <33){
+    frameNumber ++; 
   }
+  if(frameNumber ==33){
+    frameNumber =1; 
+  }
+  image(sun[frameNumber], width/2, height/2);  
  
-  // to manage the translation of inside crescent
-  if (deltaIndex > floor(nbSamples*0.5)) {
-    int nbIndexDelta = deltaIndex-floor(nbSamples*0.5);
-    for (int i = 0; i < nbIndexDelta; i++) {
-      deltaX+= ptsCircle[(nbSamples+idVertexStart)+i][0];
+}
+
+PImage img;
+PImage img1;
+//PImage[] img2 = new PImage[numFrames];
+
+class Ball {
+  // VARIABLES
+  float x=0;
+  float y=0;
+  float speedX = 1;
+  float speedY = 0.2;
+
+  //CONSTRUCTOR
+  Ball(float _x, float _y) {
+    img1=loadImage("potato1.jpg");
+    img=loadImage("potato.png");
+    x=_x;
+    y=_y;
+  }
+
+
+  //FUNCTIONS
+  void run() {
+    display();
+    move();
+    bounce();
+    gravity();
+  }
+  void gravity() {
+    speedY += 0.1;
+  }
+
+  void bounce() {
+    if (x > width) {
+      speedX = speedX * -1;
+    }
+    if (x <0) {
+      speedX = speedX * -1;
+    }
+    if (y > height) {
+      speedY = speedY * -1;
+    }
+    if (y <0) {
+      speedY = speedY * -1;
     }
   }
- 
-  // Inside crescent
-  for (int i=idVertexEndInsideCrescent; i>idVertexStartInsideCrescent; i--) {
-   if (i < 0) {
-     vertex(ptsCircle[nbSamples+i][0]+(deltaX*2), ptsCircle[nbSamples+i][1]);
-   } else {
-     vertex(ptsCircle[i][0]+(deltaX*2), ptsCircle[i][1]);
-   }
+  void move() {
+    x += speedX;
+    y += speedY;
   }
-  endShape(CLOSE);
- 
-  deltaX = 0;
+
+  void display() {
+
+    image(img, x*2, y*2, 50, 50); 
+    image(img1, x, y, 50, 50);
+  }
 }
