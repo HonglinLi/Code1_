@@ -1,0 +1,51 @@
+ArrayList<Walker> walkerList = new ArrayList<Walker>();
+
+void setup() {
+  size(700, 700);
+  noStroke();
+  background(0);
+}
+
+void draw() {
+  for (Walker walker : walkerList) {
+    walker.move();
+    walker.display();
+  }
+}
+
+void mousePressed() {
+  walkerList.add(new Walker(mouseX,mouseY));
+}
+
+
+
+class Walker {
+  float x, y, xStep, siz;
+
+  Walker(float x, float y) {
+    this.x = x;
+    this.siz = 2;
+    this.y = y;
+    this.xStep = this.siz * 4;
+  }
+
+  void display() {
+    fill(255);
+    rect(x,y, siz, siz);
+  }
+
+
+  void move() {
+    int rand = (int)random(10);
+    switch (rand) {
+    case 1:
+      x+=xStep;
+      break;
+    case 2:
+      x+=xStep;
+      break;
+    default:
+      break;
+    }
+  }
+}
